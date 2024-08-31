@@ -12,6 +12,7 @@ public class SkiArea {
 	private String name; 
 	private TreeMap<String, Lift> liftTypes = new TreeMap<>();
 	private TreeMap<String, String> lifts = new TreeMap<>();
+	private TreeMap<String, Slope> slopes = new TreeMap<>();
 
 	/**
 	 * Creates a new ski area
@@ -110,6 +111,8 @@ public class SkiArea {
 	 * @throws InvalidLiftException in case the lift has not been defined
 	 */
     public void createSlope(String name, String difficulty, String lift) throws InvalidLiftException {
+		if(!lifts.containsKey(lift)) throw new InvalidLiftException();
+		slopes.put(name, new Slope(name, difficulty, lift));
 
     }
     
@@ -119,7 +122,7 @@ public class SkiArea {
      * @return difficulty
      */
 	public String getDifficulty(String slopeName) {
-		return null;
+		return slopes.get(slopeName).getDifficulty();
 	}
 
 	/**
@@ -128,7 +131,7 @@ public class SkiArea {
 	 * @return starting lift
 	 */
 	public String getStartLift(String slopeName) {
-		return null;
+		return  slopes.get(slopeName).getLiftName();
 	}
 
 	/**
@@ -137,7 +140,7 @@ public class SkiArea {
 	 * @return list of slopes
 	 */
     public Collection<String> getSlopes(){
-		return null;
+		return slopes.keySet();
     }
 
     /**
@@ -147,7 +150,8 @@ public class SkiArea {
      * @return the list of slopes
      */
     public Collection<String> getSlopesFrom(String lift){
-		return null;
+		return slopes.values().stream().filter(s->s.getLiftName().equals(lift))
+		.collect(Collectors.mapping(Slope::getName, Collectors.toList()));
     }
 
     /**
