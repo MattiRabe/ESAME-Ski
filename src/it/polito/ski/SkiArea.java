@@ -13,6 +13,7 @@ public class SkiArea {
 	private TreeMap<String, Lift> liftTypes = new TreeMap<>();
 	private TreeMap<String, String> lifts = new TreeMap<>();
 	private TreeMap<String, Slope> slopes = new TreeMap<>();
+	private TreeMap<String, Parking> parkings = new TreeMap<>();
 
 	/**
 	 * Creates a new ski area
@@ -160,6 +161,7 @@ public class SkiArea {
      * @param slots	slots available in the parking
      */
     public void createParking(String name, int slots){
+		parkings.put(name, new Parking(name, slots));
 
     }
 
@@ -169,7 +171,7 @@ public class SkiArea {
      * @return number of slots
      */
 	public int getParkingSlots(String parking) {
-		return -1;
+		return parkings.get(parking).getSlots();
 	}
 
 	/**
@@ -178,7 +180,7 @@ public class SkiArea {
 	 * @param parking	parking name
 	 */
 	public void liftServedByParking(String lift, String parking) {
-
+		parkings.get(parking).addLift(lift, liftTypes.get(lifts.get(lift)));
 	}
 
 	
@@ -188,7 +190,7 @@ public class SkiArea {
 	 * @return the list of lifts
 	 */
 	public Collection<String> servedLifts(String parking) {
-		return null;
+		return parkings.get(parking).getLifts().keySet();
 	}
 
 	/**
@@ -200,7 +202,7 @@ public class SkiArea {
 	 * @return true if the parking is proportionate
 	 */
 	public boolean isParkingProportionate(String parkingName) {
-		return false;
+		return parkings.get(parkingName).isProportionate();
 	}
 
 	/**
