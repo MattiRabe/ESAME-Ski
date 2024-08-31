@@ -1,8 +1,9 @@
 package it.polito.ski;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -221,6 +222,24 @@ public class SkiArea {
 	 * @throws InvalidLiftException in case of duplicate type or non-existent lift type
 	 */
     public void readLifts(String path) throws IOException, InvalidLiftException {
+
+		try(BufferedReader buff = new BufferedReader(new FileReader(path))){
+			String line;
+
+			while((line=buff.readLine())!=null){
+
+				String[] str = line.split(";");
+				if(str[0].trim().equals("T") && str.length==4){
+					liftType(str[1].trim(), str[2].trim(), Integer.parseInt(str[3].trim()));
+				}
+				else if(str[0].trim().equals("L") && str.length==3){
+					createLift(str[1].trim(), str[2].trim());
+				}
+
+			}
+
+		}
+
 
     }
 
