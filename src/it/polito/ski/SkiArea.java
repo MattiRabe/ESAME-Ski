@@ -2,13 +2,16 @@ package it.polito.ski;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class SkiArea {
 
 	private String name; 
-	private TreeMap<String, Lift> lifts = new TreeMap<>();
+	private TreeMap<String, Lift> liftTypes = new TreeMap<>();
+	private TreeMap<String, String> lifts = new TreeMap<>();
 
 	/**
 	 * Creates a new ski area
@@ -34,8 +37,8 @@ public class SkiArea {
      * @throws InvalidLiftException in case of duplicate code or if the capacity is <= 0
      */
     public void liftType(String code, String category, int capacity) throws InvalidLiftException {
-		if(lifts.containsKey(code)) throw new InvalidLiftException();
-		else lifts.put(code, new Lift(code, category, capacity));
+		if(liftTypes.containsKey(code)) throw new InvalidLiftException();
+		else liftTypes.put(code, new Lift(code, category, capacity));
 
     }
     
@@ -46,8 +49,8 @@ public class SkiArea {
      * @throws InvalidLiftException if the code has not been defined
      */
     public String getCategory(String typeCode) throws InvalidLiftException {
-		if(!lifts.containsKey(typeCode)) throw new InvalidLiftException();
-		return lifts.get(typeCode).getCategory();
+		if(!liftTypes.containsKey(typeCode)) throw new InvalidLiftException();
+		return liftTypes.get(typeCode).getCategory();
     }
 
     /**
@@ -57,8 +60,8 @@ public class SkiArea {
      * @throws InvalidLiftException if the code has not been defined
      */
     public int getCapacity(String typeCode) throws InvalidLiftException {
-		if(!lifts.containsKey(typeCode)) throw new InvalidLiftException();
-        return lifts.get(typeCode).getCapacity();
+		if(!liftTypes.containsKey(typeCode)) throw new InvalidLiftException();
+        return liftTypes.get(typeCode).getCapacity();
     }
 
 
@@ -67,7 +70,7 @@ public class SkiArea {
      * @return the list of codes
      */
 	public Collection<String> types() {
-		return lifts.keySet();
+		return liftTypes.keySet();
 	}
 	
 	/**
@@ -78,7 +81,8 @@ public class SkiArea {
 	 * @throws InvalidLiftException in case the lift type is not defined
 	 */
     public void createLift(String name, String typeCode) throws InvalidLiftException{
-
+		if(!liftTypes.containsKey(typeCode)) throw new InvalidLiftException();
+		lifts.put(name, typeCode);
     }
     
 	/**
@@ -87,7 +91,7 @@ public class SkiArea {
 	 * @return type of the lift
 	 */
 	public String getType(String lift) {
-		return null;
+		return lifts.get(lift);
 	}
 
 	/**
@@ -95,7 +99,7 @@ public class SkiArea {
 	 * @return the list of names sorted alphabetically
 	 */
 	public List<String> getLifts(){
-		return null;
+		return lifts.keySet().stream().sorted().collect(Collectors.toList());
     }
 
 	/**
